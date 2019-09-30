@@ -1,0 +1,40 @@
+﻿@model RClone.Models.Post
+
+@{
+    ViewData["Title"] = "Post";
+}
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>RClone - Post</title>
+</head>
+<body>
+    <div class="form-group">
+        @using (Html.BeginForm("Post", "Home", FormMethod.Post))
+        {
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.Title,
+                                    new { placeholder = "Enter your title here...", @class = "form-input" })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.TextAreaFor(model => model.Text, 10, 70,
+                                    null)
+                @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
+            </div>
+
+            <div>
+                @Html.DropDownList("CommunityId", new SelectList(ViewBag.Communities, "CommunityId", "Name"))
+            </div>
+
+            <div>
+                <button type="submit">Submit Post</button>
+            </div>
+
+            <hr />
+
+            <a asp-action="Index" asp-controller="Home">Back to Home</a>
+
+        }
+    </div>
+</body>

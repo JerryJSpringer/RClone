@@ -1,0 +1,35 @@
+﻿@model RClone.Models.Post
+
+@{
+    ViewData["Title"] = "EditPost";
+}
+
+<h1>Edit Post</h1>
+<div class="form-group">
+    <form asp-action="EditPost" asp-controller="Post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="PostId" />
+
+        <div class="form-group">
+            <label asp-for="Title" class="control-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Text" class="control-label"></label>
+            <input asp-for="Text" class="form-control" />
+            <span asp-validation-for="Text" class="text-danger"></span>
+        </div>
+
+        <div>
+            <button type="submit" value="save">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to Home</a>
+</div>
+

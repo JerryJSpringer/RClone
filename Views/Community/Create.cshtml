@@ -1,0 +1,32 @@
+﻿@model RClone.Models.Community
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h5>Create a Community</h5>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>RClone - Create</title>
+</head>
+<body>
+    Here a user can create a community
+    <hr />
+    <div class="form-group">
+        @using (Html.BeginForm("Create", "Community", FormMethod.Post))
+        {
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.Name,
+                                    new { placeholder = "Enter Name...", @class = "form-input" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+
+            <button type="submit">Create</button>
+
+            <hr />
+
+            <a asp-action="Index" asp-controller="Home">Back to Home</a>
+        }
+    </div>
+</body>

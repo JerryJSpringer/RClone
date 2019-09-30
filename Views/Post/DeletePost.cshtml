@@ -1,0 +1,78 @@
+﻿@model RClone.Models.Post
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+	ViewData["Title"] = "DeletePost";
+}
+
+<h5>Delete Post</h5>
+<p class="text-danger">@ViewData["ErrorMessage"]</p>
+
+<div class="container" style="background-color:aliceblue; margin-top:5px;
+            margin-bottom:5px ;border:1px; border-color:gray; border-style:solid">
+
+	<div style="font-size:20px">Are you sure you want to delete this?</div>
+
+	<div class="container" style="background-color:aliceblue; margin-top:10px; margin-bottom:10px;
+		border:1px; border-color:gray; border-style:solid">
+
+		<div class="row">
+			<div class="col-md-auto" style="text-align:center">
+				<div class="col">
+					<a asp-action="Upvote" asp-controller="Post">+</a>
+				</div>
+
+				<div class="w-100"></div>
+
+				<div class="col">
+					@(ViewBag.Post.Upvotes - ViewBag.Post.Downvotes)
+				</div>
+
+				<div class="w-100"></div>
+
+				<div class="col">
+					<a asp-action="Downvote" asp-controller="Post">-</a>
+				</div>
+			</div>
+
+			<div class="col-6">
+				<div class="col" style="font-size:20px">
+					<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@ViewBag.Post.Community.Name" asp-route-id="@ViewBag.Post.PostId">
+						@ViewBag.Post.Title
+					</a>
+				</div>
+
+				<div class="w-100"></div>
+
+				<div class="col" style="font-size:12px">
+					submitted at @ViewBag.Post.Time by @ViewBag.Post.UserInfo.Username to&nbsp;
+					<a asp-action="DisplayCommunity" asp-controller="Community" asp-route-communityName="@ViewBag.Post.Community.Name">
+						@ViewBag.Post.Community.Name
+					</a>
+				</div>
+
+				<div class="w-100"></div>
+
+				<div class="col">
+					<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@ViewBag.Post.Community.Name" asp-route-id="@ViewBag.Post.PostId">
+						@(ViewBag.Post.Comments == null ? 0 : ViewBag.Post.Comments.Count) comments
+					</a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<form asp-action="Delete">
+		<input type="hidden" asp-for="PostId" />
+
+		<div style="margin-top:10px; margin-bottom:10px">
+			<button type="submit">Submit</button>
+		</div>
+
+		<a asp-action="Index" asp-controller="Home">Back to Front Page</a>
+	</form>
+</div>
+

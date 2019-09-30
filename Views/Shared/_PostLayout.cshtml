@@ -1,0 +1,114 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+	Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html>
+
+<body>
+	<div class="row">
+		@if (ViewBag.Community != null)
+		{
+			<div class="container" style="background-color:aliceblue; margin-top:5px; margin-bottom:5px;
+				border:1px; border-color:gray; border-style:solid; font-size:15px">
+				<a asp-action="DisplayCommunity" asp-controller="Community" style="font-size:20px">@ViewBag.Community.Name</a>:
+
+				@if (ViewBag.Subscribed)
+				{
+					<a asp-action="Unsubscribe" asp-controller="Community" asp-route-communityName="@ViewBag.Community.Name">Unsubscribe</a>
+				}
+				else
+				{
+					<a asp-action="Subscribe" asp-controller="Community" asp-route-communityName="@ViewBag.Community.Name">Subscribe</a>
+				}
+
+				<a asp-action="Post" asp-controller="Post">Post</a>
+			</div>
+		}
+
+		@foreach (Post post in ViewBag.Posts)
+		{
+			<div class="container" style="background-color:aliceblue; margin-top:5px;
+				margin-bottom:5px ;border:1px; border-color:gray; border-style:solid">
+
+				<div class="row">
+					<div class="col-md-auto" style="text-align:center">
+						<div class="col">
+							<a asp-action="UpvotePost" asp-controller="Post" 
+								asp-route-communityName="@post.Community.Name" asp-route-postId="@post.PostId">+</a>
+						</div>
+
+						<div class="w-100"></div>
+
+						<div class="col">
+							@(post.UpvotedPosts.Count - post.DownvotedPosts.Count)
+						</div>
+
+						<div class="w-100"></div>
+
+						<div class="col">
+							<a asp-action="DownvotePost" asp-controller="Post" 
+								asp-route-communityName="@post.Community.Name" asp-route-postId="@post.PostId">-</a>
+						</div>
+					</div>
+
+					<div class="col-6">
+						<div class="col" style="font-size:20px">
+							<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@post.Community.Name" asp-route-postId="@post.PostId">
+								@post.Title
+							</a>
+						</div>
+
+						<div class="w-100"></div>
+
+						<div class="col" style="font-size:12px">
+							submitted at @post.Time by @post.UserInfo.Username to&nbsp;
+							<a asp-action="DisplayCommunity" asp-controller="Community" asp-route-communityName="@post.Community.Name">
+								@post.Community.Name
+							</a>
+						</div>
+
+						<div class="w-100"></div>
+
+						<div class="col">
+
+							<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@post.Community.Name" asp-route-postId="@post.PostId">
+								@(post.Comments == null ? 0 : post.Comments.Count) comments
+							</a>
+
+							&nbsp;
+							@if ((await AuthorizationService.AuthorizeAsync(
+							  User, post, RCloneOperations.Update)).Succeeded)
+							{
+								<a asp-action="EditPost" asp-controller="Post" asp-route-id="@post.PostId">
+									edit
+								</a>
+							}
+
+							&nbsp;
+							@if ((await AuthorizationService.AuthorizeAsync(
+							  User, post, RCloneOperations.Delete)).Succeeded)
+							{
+								<a asp-action="DeletePost" asp-controller="Post" asp-route-id="@post.PostId">
+									delete
+								</a>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+
+	<div class="container">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
+</body>
+
+</html>
