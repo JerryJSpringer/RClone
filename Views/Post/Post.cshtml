@@ -1,40 +1,49 @@
 ﻿@model RClone.Models.Post
 
 @{
-    ViewData["Title"] = "Post";
+	ViewData["Title"] = "Post";
 }
 
+<html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>RClone - Post</title>
+	<meta name="viewport" content="width=device-width" />
+	<title>RClone - Post</title>
 </head>
+
 <body>
-    <div class="form-group">
-        @using (Html.BeginForm("Post", "Home", FormMethod.Post))
-        {
-            <div class="form-group">
-                @Html.TextBoxFor(model => model.Title,
-                                    new { placeholder = "Enter your title here...", @class = "form-input" })
-                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group">
-                @Html.TextAreaFor(model => model.Text, 10, 70,
-                                    null)
-                @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
-            </div>
+	<div class="container" id="container-theme1">
+		<h5 id="create">
+			Create a post
+		</h5>
 
-            <div>
-                @Html.DropDownList("CommunityId", new SelectList(ViewBag.Communities, "CommunityId", "Name"))
-            </div>
+		<div class="form-group">
+			@using (Html.BeginForm("Post", "Home", FormMethod.Post))
+			{
 
-            <div>
-                <button type="submit">Submit Post</button>
-            </div>
+				<div class="form-group" id="create">
+					<input placeholder="Enter a title" asp-for="Title" class="form-control">
+				</div>
 
-            <hr />
+				<div class="form-group" id="create">
+					<textarea placeholder="Enter the text" asp-for="Text" class="form-control"></textarea>
+				</div>
 
-            <a asp-action="Index" asp-controller="Home">Back to Home</a>
+				<div id="create">
+					@Html.DropDownList("CommunityId", new SelectList(ViewBag.Communities, "CommunityId", "Name"))
+				</div>
 
-        }
-    </div>
+				<div id="create">
+					<button type="submit">Submit Post</button>
+				</div>
+
+				<hr />
+
+				<div id="create">
+					<a asp-action="Index" asp-controller="Home">Back to Home</a>
+				</div>
+
+			}
+		</div>
+	</div>
 </body>
+</html>
