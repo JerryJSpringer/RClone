@@ -38,6 +38,7 @@ namespace RClone.Controllers
 
 		// GET for DisplayPost
 		[Route("c/{communityName}/comments/{postId}")]
+		[AllowAnonymous]
 		public async Task<IActionResult> DisplayPost(string communityName, int? postId = null)
 		{
 			var post = await _context.Posts
@@ -68,7 +69,6 @@ namespace RClone.Controllers
 
 		// GET for posts
 		[Route("Post")]
-		[Authorize]
 		public IActionResult Post()
 		{
 			ViewBag.Communities = PopulateCommunitiesDropDownList();
@@ -77,7 +77,6 @@ namespace RClone.Controllers
 
 		// POST for posts
 		[Route("Post")]
-		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> Post([Bind("Title, Text, CommunityId")] Post post)
 		{
@@ -128,7 +127,6 @@ namespace RClone.Controllers
 
 		// GET for EditPost
 		[Route("EditPost/{id}")]
-		[Authorize]
 		public async Task<IActionResult> EditPost(int? id)
 		{
 
@@ -164,7 +162,6 @@ namespace RClone.Controllers
 
 		// POST for EditPost
 		[Route("EditPost/{id}")]
-		[Authorize]
 		[HttpPost, ActionName("EditPost")]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> EditPostConfirmed(int? id)
@@ -211,7 +208,6 @@ namespace RClone.Controllers
 
 		// GET for DeletePost
 		[Route("DeletePost/{id}")]
-		[Authorize]
 		public async Task<IActionResult> DeletePost(int? id, bool? saveChangesError = false)
 		{
 			if (id == null)
@@ -251,7 +247,6 @@ namespace RClone.Controllers
 
 		// POST for DeletePost
 		[Route("DeletePost/{id}")]
-		[Authorize]
 		[HttpPost, ActionName("Delete")]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
@@ -321,7 +316,6 @@ namespace RClone.Controllers
 
 		// Post for Comment
 		[Route("Comment/{postId?}")]
-		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> Comment([Bind("Text, PostId, CommunityId")] Comment Comment)
 		{
@@ -354,10 +348,10 @@ namespace RClone.Controllers
 		}
 
 
-		// GET for UpvotePost
-		[Route("c/{communityName}/comments/{postId}/upvote")]
-		[Authorize]
-		public async Task<IActionResult> UpvotePost(string communityName, int postId, string returnUrl)
+		// POST for UpvotePost
+		[Route("UpvotePost")]
+		[HttpPost]
+		public async Task UpvotePost(int postId)
 		{
 			var userId = _userManager.GetUserId(User);
 			ApplicationUser user = await _context.Users
@@ -403,21 +397,12 @@ namespace RClone.Controllers
 				// Logs the database error
 				ModelState.AddModelError("", "Database error on upvote post.");
 			}
-
-			if (!String.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-				return Redirect(returnUrl);
-			else
-				return RedirectToAction("DisplayPost", "Post", new
-				{
-					communityName,
-					postId
-				});
 		}
 
-		// GET for DownvotePost
-		[Route("c/{communityName}/comments/{postId}/downvote")]
-		[Authorize]
-		public async Task<IActionResult> DownvotePost(string communityName, int postId, string returnUrl)
+		// POST for DownvotePost
+		[Route("DownvotePost")]
+		[HttpPost]
+		public async Task DownvotePost(int postId)
 		{
 			var userId = _userManager.GetUserId(User);
 			ApplicationUser user = await _context.Users
@@ -463,22 +448,13 @@ namespace RClone.Controllers
 				// Logs the database error
 				ModelState.AddModelError("", "Database error on upvote post.");
 			}
-
-			if (!String.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-				return Redirect(returnUrl);
-			else
-				return RedirectToAction("DisplayPost", "Post", new
-				{
-					communityName,
-					postId
-				});
 		}
 
 
-		// GET for UpvoteComment
-		[Route("c/{communityName}/comments/{postId}/{commentId}/upvote")]
-		[Authorize]
-		public async Task<IActionResult> UpvoteComment(string communityName, int postId, int commentId, string returnUrl)
+		// POST for UpvoteComment
+		[Route("UpvoteComment")]
+		[HttpPost]
+		public async Task UpvoteComment(int postId, int commentId)
 		{
 			var userId = _userManager.GetUserId(User);
 			ApplicationUser user = await _context.Users
@@ -524,21 +500,11 @@ namespace RClone.Controllers
 				// Logs the database error
 				ModelState.AddModelError("", "Database error on upvote post.");
 			}
-
-			if (!String.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-				return Redirect(returnUrl);
-			else 
-				return RedirectToAction("DisplayPost", "Post", new
-				{
-					communityName,
-					postId
-				});
 		}
 
-		// GET for DownvoteComment
-		[Route("c/{communityName}/comments/{postId}/{commentId}/downvote")]
-		[Authorize]
-		public async Task<IActionResult> DownvoteComment(string communityName, int postId, int commentId, string returnUrl)
+		// POST for DownvoteComment
+		[Route("DownvoteComment")]
+		public async Task DownvoteComment(int postId, int commentId)
 		{
 			var userId = _userManager.GetUserId(User);
 			ApplicationUser user = await _context.Users
@@ -584,15 +550,6 @@ namespace RClone.Controllers
 				// Logs the database error
 				ModelState.AddModelError("", "Database error on upvote post.");
 			}
-
-			if (!String.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-				return Redirect(returnUrl);
-			else
-				return RedirectToAction("DisplayPost", "Post", new
-				{
-					communityName,
-					postId
-				});
 		}
 	}
 }
