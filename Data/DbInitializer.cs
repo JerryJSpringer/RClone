@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using RClone.Authorization;
 using RClone.Models;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,10 @@ namespace RClone.Data
 {
 	public class DbInitializer
 	{
-		public static void Initialize(RCloneDbContext context, UserManager<ApplicationUser> userManager)
+		public static void Initialize(RCloneDbContext _context, UserManager<ApplicationUser> _userManager)
 		{
 			// Check for existing data
-			if (context.Users.Any())
+			if (_context.Users.Any())
 			{
 				return; // Database is already seeded
 			}
@@ -63,12 +64,15 @@ namespace RClone.Data
 				user.UserInfo = new UserInfo { Username = user.UserName };
 
 				// Creates the user with default password
-				IdentityResult result = userManager.CreateAsync
+				IdentityResult result = _userManager.CreateAsync
 					(user, "password").Result;
+
+				// Add user to role
+				_userManager.AddToRoleAsync(user, Constants.RCloneUserRole);
 			}
 
 			// Save the changes
-			context.SaveChanges();
+			_context.SaveChanges();
 
 
 			// Make new communities
@@ -103,11 +107,11 @@ namespace RClone.Data
 				UserInfo owner = community.UserInfo;
 				owner.OwnedCommunities = new Community[] { community };
 
-				context.Communities.Add(community);
+				_context.Communities.Add(community);
 			}
 
 			// Save the changes
-			context.SaveChanges();
+			_context.SaveChanges();
 
 
 			// Make new Posts
@@ -161,11 +165,11 @@ namespace RClone.Data
 			// Add the posts
 			foreach (Post post in Posts)
 			{
-				context.Posts.Add(post);
+				_context.Posts.Add(post);
 			}
 
 			// Save changes
-			context.SaveChanges();
+			_context.SaveChanges();
 
 
 			// Make new comments
@@ -225,11 +229,11 @@ namespace RClone.Data
 			// Add the comments
 			foreach (Comment comment in comments)
 			{
-				context.Comments.Add(comment);
+				_context.Comments.Add(comment);
 			}
 
 			// Save changes
-			context.SaveChanges();
+			_context.SaveChanges();
 
 
 			// Make new subscriptions
@@ -287,11 +291,11 @@ namespace RClone.Data
 			// Add the subscriptions
 			foreach (Subscription subscription in Subscriptions)
 			{
-				context.Subscriptions.Add(subscription);
+				_context.Subscriptions.Add(subscription);
 			}
 
 			// Save changes
-			context.SaveChanges();
+			_context.SaveChanges();
 		}
 	}
 }
