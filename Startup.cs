@@ -13,6 +13,7 @@ using RClone.Models;
 using Microsoft.AspNetCore.Authorization;
 using RClone.Authorization;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace RClone
 {
@@ -47,6 +48,7 @@ namespace RClone
 				.AddRoleManager<RoleManager<IdentityRole>>()
 				.AddEntityFrameworkStores<RCloneDbContext>()	
 				.AddDefaultTokenProviders();
+
 			// Adds authorization
 			services.AddAuthorization();
 
@@ -84,7 +86,15 @@ namespace RClone
 			});
 
 			// Adds MVC and sets the compatibility version to 2.2
-			services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
+			services.AddMvc(config =>
+			{
+				var policy = new AuthorizationPolicyBuilder()
+					.RequireAuthenticatedUser()
+					.Build();
+
+				config.Filters.Add(new AuthorizeFilter(policy));
+			})
+				.SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
 
 			// Authorization handlers
 			services.AddScoped<IAuthorizationHandler,
@@ -127,7 +137,8 @@ namespace RClone
 
 			string[] roleNames = { Constants.RCloneAdminRole, 
 				Constants.RCloneModRole,
-				Constants.RCloneNormalRole};
+				Constants.RCloneUserRole,
+				Constants.RCloneDefaultRole};
 
 			foreach (var roleName in roleNames)
 			{
