@@ -91,3 +91,7 @@ div {
 	border-color: gray;
 	border-style: solid;
 }
+
+#create {
+	margin: 10px;
+}
