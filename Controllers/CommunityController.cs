@@ -36,7 +36,6 @@ namespace RClone.Controllers
 
 		// GET: Community/Create
 		[Route("Create")]
-		[Authorize]
 		public IActionResult Create()
 		{
 			return View();
@@ -46,7 +45,6 @@ namespace RClone.Controllers
 		// POST: Community/Create
 		[Route("Create")]
 		[HttpPost]
-		[Authorize]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create([Bind("Name")] Community community)
 		{
@@ -97,6 +95,7 @@ namespace RClone.Controllers
 
 		// GET for DisplayCommunity
 		[Route("c/{communityName}")]
+		[AllowAnonymous]
 		public async Task<IActionResult> DisplayCommunity(string communityName)
 		{
 			// Load community by the community name with associated Posts, Comments, and UserInfo
@@ -145,7 +144,6 @@ namespace RClone.Controllers
 
 		// GET for Subscribe
 		[Route("c/{communityName}/subscribe")]
-		[Authorize]
 		public async Task<IActionResult> Subscribe(string communityName)
 		{
 			Subscription sub = await getSubscriptionAsync(communityName);
@@ -171,7 +169,6 @@ namespace RClone.Controllers
 
 		// GET for Unsubscribe
 		[Route("c/{communityName}/unsubscribe")]
-		[Authorize]
 		public async Task<IActionResult> Unsubscribe(string communityName)
 		{
 			Subscription sub = await getSubscriptionAsync(communityName);
