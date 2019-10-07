@@ -34,6 +34,7 @@ namespace RClone.Authorization
 
 		public static readonly string RCloneAdminRole = "RcloneAdmin";
 		public static readonly string RCloneModRole = "RCloneMod";
-		public static readonly string RCloneNormalRole = "RCloneNormal";
+		public static readonly string RCloneUserRole = "RCloneUser";
+		public static readonly string RCloneDefaultRole = "RCloneNormal";
 	}
 }
