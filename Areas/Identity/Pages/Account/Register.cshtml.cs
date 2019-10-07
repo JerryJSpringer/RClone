@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using RClone.Authorization;
 using RClone.Models;
 
 namespace RClone.Areas.Identity.Pages.Account
@@ -73,7 +74,7 @@ namespace RClone.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = Input.Username, Email = Input.Email, UserInfo = new UserInfo { Username = Input.Username } };
-                var result = await _userManager.CreateAsync(user, Input.Password);
+				var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -89,7 +90,10 @@ namespace RClone.Areas.Identity.Pages.Account
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+
+					await _userManager.AddToRoleAsync(user, Constants.RCloneUserRole);
+
+					return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)
                 {
