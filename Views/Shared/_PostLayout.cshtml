@@ -129,21 +129,5 @@
 					postId: postId
 				});
 		}
-
-		function UpvoteComment(postId, commentId) {
-			$.post('@Url.Action("UpvoteComment", "Post")',
-				{
-					postId: postId,
-					commentId: commentId
-				});
-		}
-
-		function DownvoteComment(postId, commentId) {
-			$.post('@Url.Action("UpvoteComment", "Post")',
-				{
-					postId: postId,
-					commentId: commentId
-				});
-		}
 	</script>
 }
