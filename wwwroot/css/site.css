@@ -62,3 +62,32 @@ div {
 	word-break: break-all;
 	white-space: normal;
 }
+
+/* Container styling
+-------------------------------------------------- */
+#container-community-theme1 {
+	background-color:aliceblue;
+	margin-top:5px; 
+	margin-bottom:5px; 
+	border:1px;
+	border-color: gray;
+	border-style: solid;
+	font-size: 15px;
+}
+
+#container-theme1 {
+	background-color: aliceblue;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	border: 1px;
+	border-color: gray;
+	border-style: solid;
+}
+
+#container-comment-theme-1 {
+	background-color: aliceblue; 
+	margin-top: 10px; 
+	border:1px;
+	border-color: gray;
+	border-style: solid;
+}
