@@ -9,12 +9,15 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+	<link rel="stylesheet" href="~/css/site.css" type="text/css" runat="server" />
+</head>
+
 <body>
 	<div class="row">
 		@if (ViewBag.Community != null)
 		{
-			<div class="container" style="background-color:aliceblue; margin-top:5px; margin-bottom:5px;
-				border:1px; border-color:gray; border-style:solid; font-size:15px">
+			<div class="container" id="container-community-theme1">
 				<a asp-action="DisplayCommunity" asp-controller="Community" style="font-size:20px">@ViewBag.Community.Name</a>:
 
 				@if (ViewBag.Subscribed)
@@ -32,14 +35,12 @@
 
 		@foreach (Post post in ViewBag.Posts)
 		{
-			<div class="container" style="background-color:aliceblue; margin-top:5px;
-				margin-bottom:5px ;border:1px; border-color:gray; border-style:solid">
+			<div class="container" id="container-theme1">
 
 				<div class="row">
 					<div class="col-md-auto" style="text-align:center">
 						<div class="col">
-							<a asp-action="UpvotePost" asp-controller="Post" 
-								asp-route-communityName="@post.Community.Name" asp-route-postId="@post.PostId">+</a>
+							<a onclick="UpvotePost(@post.PostId)" href="javascript:void(0)">+</a>
 						</div>
 
 						<div class="w-100"></div>
@@ -51,8 +52,7 @@
 						<div class="w-100"></div>
 
 						<div class="col">
-							<a asp-action="DownvotePost" asp-controller="Post" 
-								asp-route-communityName="@post.Community.Name" asp-route-postId="@post.PostId">-</a>
+							<a onclick="DownvotePost(@post.PostId)" href="javascript:void(0)">-</a>
 						</div>
 					</div>
 
@@ -82,7 +82,7 @@
 
 							&nbsp;
 							@if ((await AuthorizationService.AuthorizeAsync(
-							  User, post, RCloneOperations.Update)).Succeeded)
+							User, post, RCloneOperations.Update)).Succeeded)
 							{
 								<a asp-action="EditPost" asp-controller="Post" asp-route-id="@post.PostId">
 									edit
@@ -91,7 +91,7 @@
 
 							&nbsp;
 							@if ((await AuthorizationService.AuthorizeAsync(
-							  User, post, RCloneOperations.Delete)).Succeeded)
+							User, post, RCloneOperations.Delete)).Succeeded)
 							{
 								<a asp-action="DeletePost" asp-controller="Post" asp-route-id="@post.PostId">
 									delete
@@ -112,3 +112,38 @@
 </body>
 
 </html>
+
+
+@section scripts {
+	<script type="text/javascript">
+		function UpvotePost(postId) {
+			$.post('@Url.Action("UpvotePost", "Post")',
+				{
+						postId: postId
+				});
+		}
+
+		function DownvotePost(postId) {
+			$.post('@Url.Action("DownvotePost", "Post")',
+				{
+					postId: postId
+				});
+		}
+
+		function UpvoteComment(postId, commentId) {
+			$.post('@Url.Action("UpvoteComment", "Post")',
+				{
+					postId: postId,
+					commentId: commentId
+				});
+		}
+
+		function DownvoteComment(postId, commentId) {
+			$.post('@Url.Action("UpvoteComment", "Post")',
+				{
+					postId: postId,
+					commentId: commentId
+				});
+		}
+	</script>
+}
