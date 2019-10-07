@@ -67,22 +67,24 @@
 		</div>
 	</div>
 
-	@if (SignInManager.IsSignedIn(User))
-	{
-
-		@using (Html.BeginForm("Comment", "Post", FormMethod.Post))
+	<div class="container" id="container-comment-theme-1">
+		@if (SignInManager.IsSignedIn(User))
 		{
-			<div class="form-group" style="margin: 10px">
-				<textarea asp-for="Text" class="form-control"></textarea>
-				<input name="PostId" type="hidden" value="@ViewBag.Post.PostId" />
-				<input name="CommunityId" type="hidden" value="@ViewBag.Post.CommunityId" />
-			</div>
 
-			<div style="margin:10px">
-				<button type="submit">Submit</button>
-			</div>
+			@using (Html.BeginForm("Comment", "Post", FormMethod.Post))
+			{
+				<div class="form-group" style="margin: 10px">
+					<textarea placeholder="Enter a comment" asp-for="Text" class="form-control"></textarea>
+					<input name="PostId" type="hidden" value="@ViewBag.Post.PostId" />
+					<input name="CommunityId" type="hidden" value="@ViewBag.Post.CommunityId" />
+				</div>
+
+				<div style="margin:10px">
+					<button type="submit">Submit</button>
+				</div>
+			}
 		}
-	}
+	</div>
 
 	@foreach (Comment c in ViewBag.Post.Comments)
 	{
