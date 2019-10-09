@@ -4,32 +4,48 @@
     ViewData["Title"] = "EditPost";
 }
 
-<h1>Edit Post</h1>
-<div class="form-group">
-    <form asp-action="EditPost" asp-controller="Post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>RClone - Edit Post</title>
+</head>
 
-        <input type="hidden" asp-for="PostId" />
+<body>
+	<div class="container" id="container-theme1">
+		<h5 id="create">
+			Edit a post
+		</h5>
 
-        <div class="form-group">
-            <label asp-for="Title" class="control-label"></label>
-            <input asp-for="Title" class="form-control" />
-            <span asp-validation-for="Title" class="text-danger"></span>
-        </div>
+		<div class="form-group">
+			<form asp-action="EditPost" asp-controller="Post">
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <div class="form-group">
-            <label asp-for="Text" class="control-label"></label>
-            <input asp-for="Text" class="form-control" />
-            <span asp-validation-for="Text" class="text-danger"></span>
-        </div>
+				<input type="hidden" asp-for="PostId" />
 
-        <div>
-            <button type="submit" value="save">Save Changes</button>
-        </div>
-    </form>
-</div>
+				<div class="form-group" id="create">
+					<label asp-for="Title" class="control-label"></label>
+					<input asp-for="Title" class="form-control" />
+					<span asp-validation-for="Title" class="text-danger"></span>
+				</div>
 
-<div>
-    <a asp-action="Index">Back to Home</a>
-</div>
+				<div class="form-group" id="create">
+					<label asp-for="Text" class="control-label"></label>
+					<input asp-for="Text" class="form-control" />
+					<span asp-validation-for="Text" class="text-danger"></span>
+				</div>
+
+				<div id="create">
+					<button type="submit" value="save">Save Changes</button>
+				</div>
+			</form>
+		</div>
+
+		<hr id="create"/>
+
+		<div id="create">
+			<a asp-action="Index">Back to Home</a>
+		</div>
+	</div>
+</body>
+</html>
 
