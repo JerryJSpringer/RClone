@@ -1,0 +1,159 @@
+﻿@model RClone.Models.Post
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+	ViewData["Title"] = "DeleteComment";
+}
+
+<p class="text-danger">@ViewData["ErrorMessage"]</p>
+
+<div class="container" id="container-theme1">
+
+	<h5 id="create">
+		Delete Comment
+	</h5>
+
+	<h6 id="create">
+		Post
+	</h6>
+
+	<!-- Post -->
+	<div id="create">
+		<div class="container" id="container-theme1">
+
+			<!-- Upvotes and downvotes -->
+			<div class="row">
+				<div class="col-md-auto" style="text-align:center">
+					<div class="col">
+						<a onclick="UpvotePost(@ViewBag.Post.PostId)" href="javascript:void(0)">+</a>
+					</div>
+
+					<div class="w-100"></div>
+
+					<div class="col">
+						@(ViewBag.Post.UpvotedPosts.Count - ViewBag.Post.DownvotedPosts.Count)
+					</div>
+
+					<div class="w-100"></div>
+
+					<div class="col">
+						<a onclick="DownvotePost(@ViewBag.Post.PostId)" href="javascript:void(0)">-</a>
+					</div>
+				</div>
+
+				<!-- Post information -->
+				<div class="col-6">
+					<div class="col" style="font-size:20px">
+						<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@ViewBag.Post.Community.Name" asp-route-PostId="@ViewBag.Post.PostId">
+							@ViewBag.Post.Title
+						</a>
+					</div>
+
+					<div class="w-100"></div>
+
+					<div class="col" style="font-size:12px">
+						submitted at @ViewBag.Post.Time by @ViewBag.Post.UserInfo.Username to&nbsp;
+						<a asp-action="DisplayCommunity" asp-controller="Community" asp-route-communityName="@ViewBag.Post.Community.Name">
+							@ViewBag.Post.Community.Name
+						</a>
+					</div>
+
+					<div class="w-100"></div>
+
+					<div class="col">
+						<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@ViewBag.Post.Community.Name" asp-route-PostId="@ViewBag.Post.PostId">
+							@(ViewBag.Post.Comments == null ? 0 : ViewBag.Post.Comments.Count) comments
+						</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h6 id="create">
+		Comment
+	</h6>
+
+	<!-- Comment -->
+	<div id="create">
+		<div class="container" id="container-comment-theme-1">
+
+			<div class="row">
+				<div class="col-md-auto" style="text-align:center">
+					<div class="col">
+						<a onclick="UpvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">+</a>
+					</div>
+
+					<div class="w-100"></div>
+
+					<div class="col">
+						<a onclick="DownvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">-</a>
+					</div>
+				</div>
+
+				<div class="col-10">
+					<div class="col" style="font-size:12px">
+						@ViewBag.Comment.UserInfo.Username @(ViewBag.Comment.UpvotedComments.Count - ViewBag.Comment.DownvotedComments.Count) @ViewBag.Comment.Time
+					</div>
+
+					<div class="col" style="font-size:15px">
+						@ViewBag.Comment.Text
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Action buttons -->
+	<form asp-action="Delete">
+		<input type="hidden" asp-for="PostId" />
+
+		<div id="create">
+			<button type="submit">Submit</button>
+		</div>
+	</form>
+
+	<hr id="create" />
+
+	<div id="create">
+		<a asp-action="Index" asp-controller="Home">Back to Front Page</a>
+	</div>
+</div>
+
+
+@section scripts {
+	<script type="text/javascript">
+		function UpvotePost(postId) {
+			$.post('@Url.Action("UpvotePost", "Post")',
+				{
+						postId: postId
+				});
+		}
+
+		function DownvotePost(postId) {
+			$.post('@Url.Action("DownvotePost", "Post")',
+				{
+					postId: postId
+				});
+		}
+
+		function UpvoteComment(postId, commentId) {
+			$.post('@Url.Action("UpvoteComment", "Post")',
+				{
+					postId: postId,
+					commentId: commentId
+				});
+		}
+
+		function DownvoteComment(postId, commentId) {
+			$.post('@Url.Action("DownvoteComment", "Post")',
+				{
+					postId: postId,
+					commentId: commentId
+				});
+		}
+	</script>
+}

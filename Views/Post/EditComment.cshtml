@@ -1,0 +1,166 @@
+﻿@model RClone.Models.Comment
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+	ViewData["Title"] = "EditComment";
+}
+
+<p class="text-danger">@ViewData["ErrorMessage"]</p>
+
+<div class="container" id="container-theme1">
+
+	<h5 id="create">
+		Edit Comment
+	</h5>
+
+	<h6 id="create">
+		Post
+	</h6>
+
+	<!-- Post -->
+	<div id="create">
+		<div class="container" id="container-theme1">
+
+			<!-- Upvotes and downvotes -->
+			<div class="row">
+				<div class="col-md-auto" style="text-align:center">
+					<div class="col">
+						<a onclick="UpvotePost(@ViewBag.Post.PostId)" href="javascript:void(0)">+</a>
+					</div>
+
+					<div class="w-100"></div>
+
+					<div class="col">
+						@(ViewBag.Post.UpvotedPosts.Count - ViewBag.Post.DownvotedPosts.Count)
+					</div>
+
+					<div class="w-100"></div>
+
+					<div class="col">
+						<a onclick="DownvotePost(@ViewBag.Post.PostId)" href="javascript:void(0)">-</a>
+					</div>
+				</div>
+
+				<!-- Post information -->
+				<div class="col-6">
+					<div class="col" style="font-size:20px">
+						<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@ViewBag.Post.Community.Name" asp-route-PostId="@ViewBag.Post.PostId">
+							@ViewBag.Post.Title
+						</a>
+					</div>
+
+					<div class="w-100"></div>
+
+					<div class="col" style="font-size:12px">
+						submitted at @ViewBag.Post.Time by @ViewBag.Post.UserInfo.Username to&nbsp;
+						<a asp-action="DisplayCommunity" asp-controller="Community" asp-route-communityName="@ViewBag.Post.Community.Name">
+							@ViewBag.Post.Community.Name
+						</a>
+					</div>
+
+					<div class="w-100"></div>
+
+					<div class="col">
+						<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@ViewBag.Post.Community.Name" asp-route-PostId="@ViewBag.Post.PostId">
+							@(ViewBag.Post.Comments == null ? 0 : ViewBag.Post.Comments.Count) comments
+						</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h6 id="create">
+		Comment
+	</h6>
+
+	<!-- Comment -->
+
+	<div class="form-group">
+		<form asp-action="EditComment" asp-controller="Post">
+			<div id="create">
+				<div class="container" id="container-comment-theme-1">
+
+					<div class="row">
+						<div class="col-md-auto" style="text-align:center">
+							<div class="col">
+								<a onclick="UpvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">+</a>
+							</div>
+
+							<div class="w-100"></div>
+
+							<div class="col">
+								<a onclick="DownvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">-</a>
+							</div>
+						</div>
+
+						<div class="col-10">
+							<div class="col" style="font-size:12px">
+								@ViewBag.Comment.UserInfo.Username @(ViewBag.Comment.UpvotedComments.Count - ViewBag.Comment.DownvotedComments.Count) @ViewBag.Comment.Time
+							</div>
+
+
+							<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+							<input type="hidden" asp-for="PostId" />
+							<input type="hidden" asp-for="CommentId" />
+
+							<div class="form-group" id="create">
+								<textarea placeholder="Enter new comment" asp-for="Text" class="form-control"></textarea>
+								<span asp-validation-for="Text" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="create">
+				<button type="submit" value="save">Save changes</button>
+			</div>
+		</form>
+	</div>
+
+	<hr id="create" />
+
+	<div id="create">
+		<a asp-action="Index" asp-controller="Home">Back to Front Page</a>
+	</div>
+</div>
+
+
+@section scripts {
+	<script type="text/javascript">
+		function UpvotePost(postId) {
+			$.post('@Url.Action("UpvotePost", "Post")',
+				{
+						postId: postId
+				});
+		}
+
+		function DownvotePost(postId) {
+			$.post('@Url.Action("DownvotePost", "Post")',
+				{
+					postId: postId
+				});
+		}
+
+		function UpvoteComment(postId, commentId) {
+			$.post('@Url.Action("UpvoteComment", "Post")',
+				{
+					postId: postId,
+					commentId: commentId
+				});
+		}
+
+		function DownvoteComment(postId, commentId) {
+			$.post('@Url.Action("DownvoteComment", "Post")',
+				{
+					postId: postId,
+					commentId: commentId
+				});
+		}
+	</script>
+}
