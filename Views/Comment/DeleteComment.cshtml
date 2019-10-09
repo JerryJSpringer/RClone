@@ -4,7 +4,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-	ViewData["Title"] = "EditComment";
+	ViewData["Title"] = "DeleteComment";
 }
 
 <p class="text-danger">@ViewData["ErrorMessage"]</p>
@@ -12,7 +12,7 @@
 <div class="container" id="container-theme1">
 
 	<h5 id="create">
-		Edit Comment
+		Delete Comment
 	</h5>
 
 	<h6 id="create">
@@ -78,50 +78,44 @@
 	</h6>
 
 	<!-- Comment -->
+	<div id="create">
+		<div class="container" id="container-comment-theme-1">
 
-	<div class="form-group">
-		<form asp-action="EditComment" asp-controller="Post">
-			<div id="create">
-				<div class="container" id="container-comment-theme-1">
+			<div class="row">
+				<div class="col-md-auto" style="text-align:center">
+					<div class="col">
+						<a onclick="UpvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">+</a>
+					</div>
 
-					<div class="row">
-						<div class="col-md-auto" style="text-align:center">
-							<div class="col">
-								<a onclick="UpvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">+</a>
-							</div>
+					<div class="w-100"></div>
 
-							<div class="w-100"></div>
+					<div class="col">
+						<a onclick="DownvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">-</a>
+					</div>
+				</div>
 
-							<div class="col">
-								<a onclick="DownvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">-</a>
-							</div>
-						</div>
+				<div class="col-10">
+					<div class="col" style="font-size:12px">
+						@ViewBag.Comment.UserInfo.Username @(ViewBag.Comment.UpvotedComments.Count - ViewBag.Comment.DownvotedComments.Count) @ViewBag.Comment.Time
+					</div>
 
-						<div class="col-10">
-							<div class="col" style="font-size:12px">
-								@ViewBag.Comment.UserInfo.Username @(ViewBag.Comment.UpvotedComments.Count - ViewBag.Comment.DownvotedComments.Count) @ViewBag.Comment.Time
-							</div>
-
-
-							<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-							<input type="hidden" asp-for="PostId" />
-							<input type="hidden" asp-for="CommentId" />
-
-							<div class="form-group" id="create">
-								<textarea placeholder="Enter new comment" asp-for="Text" class="form-control"></textarea>
-								<span asp-validation-for="Text" class="text-danger"></span>
-							</div>
-						</div>
+					<div class="col" style="font-size:15px">
+						@ViewBag.Comment.Text
 					</div>
 				</div>
 			</div>
-
-			<div id="create">
-				<button type="submit" value="save">Save changes</button>
-			</div>
-		</form>
+		</div>
 	</div>
+
+	<!-- Action buttons -->
+	<form asp-action="DeleteComment">
+		<input type="hidden" asp-for="PostId" />
+		<input type="hidden" asp-for="CommentId" />
+
+		<div id="create">
+			<button type="submit">Submit</button>
+		</div>
+	</form>
 
 	<hr id="create" />
 
@@ -148,7 +142,7 @@
 		}
 
 		function UpvoteComment(postId, commentId) {
-			$.post('@Url.Action("UpvoteComment", "Post")',
+			$.post('@Url.Action("UpvoteComment", "Comment")',
 				{
 					postId: postId,
 					commentId: commentId
@@ -156,7 +150,7 @@
 		}
 
 		function DownvoteComment(postId, commentId) {
-			$.post('@Url.Action("DownvoteComment", "Post")',
+			$.post('@Url.Action("DownvoteComment", "Comment")',
 				{
 					postId: postId,
 					commentId: commentId
