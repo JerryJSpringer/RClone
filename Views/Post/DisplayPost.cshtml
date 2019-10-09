@@ -11,7 +11,6 @@
 <head>
 	<meta name="viewport" content="width=device-width" />
 	<title>RClone - Display Post</title>
-	<link rel="stylesheet" href="~/css/site.css" type="text/css" runat="server" />
 </head>
 <body>
 	<div class="container" id="container-theme1">
@@ -67,10 +66,10 @@
 		</div>
 	</div>
 
-	<div class="container" id="container-comment-theme-1">
-		@if (SignInManager.IsSignedIn(User))
-		{
 
+	@if (SignInManager.IsSignedIn(User))
+	{
+		<div class="container" id="container-comment-theme-1">
 			@using (Html.BeginForm("Comment", "Post", FormMethod.Post))
 			{
 				<div class="form-group" style="margin: 10px">
@@ -83,8 +82,8 @@
 					<button type="submit">Submit</button>
 				</div>
 			}
-		}
-	</div>
+		</div>
+	}
 
 	@foreach (Comment c in ViewBag.Post.Comments)
 	{
@@ -106,6 +105,25 @@
 				<div class="col-10">
 					<div class="col" style="font-size:12px">
 						@c.UserInfo.Username @(c.UpvotedComments.Count - c.DownvotedComments.Count) @c.Time
+						@if ((await AuthorizationService.AuthorizeAsync(
+						   User, c, RCloneOperations.Update)).Succeeded)
+						{
+							<a asp-action="EditComment" asp-controller="Post" asp-route-postId="@ViewBag.Post.PostId"
+							   asp-route-commentId="@c.CommentId">
+								Edit
+							</a>
+						}
+
+						@if ((await AuthorizationService.AuthorizeAsync(
+						   User, c, RCloneOperations.Delete)).Succeeded)
+						{
+							<a asp-action="DeleteComment" asp-controller="Post" asp-route-postId="@ViewBag.Post.PostId"
+							   asp-route-commentId="@c.CommentId">
+								Delete
+							</a>
+						}
+
+
 					</div>
 
 					<div class="col" style="font-size:15px">
