@@ -8,13 +8,11 @@
 
 <!DOCTYPE html>
 <html>
-
 <head>
-	<link rel="stylesheet" href="~/css/site.css" type="text/css" runat="server" />
+	<meta name="viewport" content="width=device-width" />
 </head>
 
 <body>
-	<div class="row">
 		@if (ViewBag.Community != null)
 		{
 			<div class="container" id="container-community-theme1">
@@ -82,7 +80,7 @@
 
 							&nbsp;
 							@if ((await AuthorizationService.AuthorizeAsync(
-							User, post, RCloneOperations.Update)).Succeeded)
+						   User, post, RCloneOperations.Update)).Succeeded)
 							{
 								<a asp-action="EditPost" asp-controller="Post" asp-route-id="@post.PostId">
 									edit
@@ -91,7 +89,7 @@
 
 							&nbsp;
 							@if ((await AuthorizationService.AuthorizeAsync(
-							User, post, RCloneOperations.Delete)).Succeeded)
+						   User, post, RCloneOperations.Delete)).Succeeded)
 							{
 								<a asp-action="DeletePost" asp-controller="Post" asp-route-id="@post.PostId">
 									delete
@@ -102,7 +100,6 @@
 				</div>
 			</div>
 		}
-	</div>
 
 	<div class="container">
 		<main role="main" class="pb-3">
