@@ -219,6 +219,8 @@ namespace RClone.Controllers
 				.Include(p => p.UserInfo)
 				.Include(p => p.Comments)
 				.Include(p => p.Community)
+				.Include(p => p.UpvotedPosts)
+				.Include(p => p.DownvotedPosts)
 				.AsNoTracking()
 				.FirstOrDefaultAsync(p => p.PostId == id);
 
@@ -265,7 +267,7 @@ namespace RClone.Controllers
 			}
 
 			var isAuthorized = await _authorizationService.AuthorizeAsync(
-				User, post, RCloneOperations.Create);
+				User, post, RCloneOperations.Delete);
 
 			if (!isAuthorized.Succeeded)
 			{
@@ -303,14 +305,12 @@ namespace RClone.Controllers
 
 				await _context.SaveChangesAsync();
 
-				RedirectToAction("Index", "Home", new { area = "" });
+				return RedirectToAction("Index", "Home", new { area = "" });
 			}
 			catch (DbUpdateException /* ex */)
 			{
 				return RedirectToAction(nameof(DeletePost), new { id = id, saveChangesError = true });
 			}
-
-			return RedirectToAction(nameof(DeletePost), new { id = id, saveChangesError = true });
 		}
 
 
@@ -550,6 +550,164 @@ namespace RClone.Controllers
 				// Logs the database error
 				ModelState.AddModelError("", "Database error on upvote post.");
 			}
+		}
+
+
+		// GET for DeleteComment
+		[Route("DeleteComment/{postId}/{commentId}")]
+		public async Task<IActionResult> DeleteComment(int postId, int commentId)
+		{
+			Comment comment = await _context.Comments
+				.Include(c => c.UserInfo)
+				.Include(c => c.UpvotedComments)
+				.Include(c => c.DownvotedComments)
+				.AsNoTracking()
+				.FirstOrDefaultAsync(c => c.CommentId == commentId);
+
+			Post post = await _context.Posts
+				.Include(p => p.UserInfo)
+				.Include(p => p.UpvotedPosts)
+				.Include(p => p.DownvotedPosts)
+				.Include(p => p.Community)
+				.AsNoTracking()
+				.FirstOrDefaultAsync(p => p.PostId == postId);
+
+			ViewBag.Comment = comment;
+			ViewBag.Post = post;
+
+			return View();
+		}
+
+		// POST for DeleteComment
+		[Route("DeleteComment/{postId}/{commentId}")]
+		[HttpPost, ActionName("DeleteComment")]
+		public async Task<IActionResult> DeleteCommentConfirmed(int? postId, int? commentId, bool? saveChangesError)
+		{
+			var comment = await _context.Comments
+				.Include(c => c.UpvotedComments)
+				.Include(c => c.DownvotedComments)
+				.FirstOrDefaultAsync(c => c.CommentId == commentId);
+
+			var post = await _context.Posts
+				.Include(p => p.Community)
+				.AsNoTracking()
+				.FirstOrDefaultAsync(p => p.PostId == postId);
+
+			if (comment == null)
+			{
+				RedirectToAction("Index", "Home", new { area = "" });
+			}
+
+			var isAuthorized = await _authorizationService.AuthorizeAsync(
+				User, comment, RCloneOperations.Delete);
+
+			if (!isAuthorized.Succeeded)
+			{
+				return new ChallengeResult();
+			}
+
+			try {
+				foreach(UpvotedComment uc in comment.UpvotedComments)
+				{
+					_context.UpvotedComments.Remove(uc);
+				}
+
+				foreach(DownvotedComment dc in comment.DownvotedComments)
+				{
+					_context.DownvotedComments.Remove(dc);
+				}
+
+				_context.Comments.Remove(comment);
+
+				await _context.SaveChangesAsync();
+
+				return RedirectToAction("DisplayPost", "Post",
+						new
+						{
+							communityName = post.Community.Name,
+							postId = postId
+						});
+			}
+			catch (DbUpdateException /* ex */)
+			{
+				return RedirectToAction(nameof(DeleteComment), new { postId, commentId, saveChangesError = true });
+			}
+		}
+
+
+		// GET for EditComment
+		[Route("EditComment/{postId}/{commentId}")]
+		public async Task<IActionResult> EditComment(int? postId, int? commentId)
+		{
+			Comment comment = await _context.Comments
+				.Include(c => c.UserInfo)
+				.Include(c => c.UpvotedComments)
+				.Include(c => c.DownvotedComments)
+				.AsNoTracking()
+				.FirstOrDefaultAsync(c => c.CommentId == commentId);
+
+			Post post = await _context.Posts
+				.Include(p => p.UserInfo)
+				.Include(p => p.UpvotedPosts)
+				.Include(p => p.DownvotedPosts)
+				.Include(p => p.Community)
+				.AsNoTracking()
+				.FirstOrDefaultAsync(p => p.PostId == postId);
+
+			ViewBag.Comment = comment;
+			ViewBag.Post = post;
+
+			return View();
+		}
+
+		// POST for EditComment
+		[Route("EditComment/{postId}/{commentId}")]
+		[HttpPost, ActionName("EditComment")]
+		public async Task<IActionResult> EditCommentConfirmed(int? postId, int? commentId)
+		{
+			if (commentId == null || postId == null)
+			{
+				return NotFound();
+			}
+
+			var comment = await _context.Comments
+				.FirstOrDefaultAsync(c => c.CommentId == commentId);
+
+			var post = await _context.Posts
+				.Include(p => p.Community)
+				.FirstOrDefaultAsync(p => p.PostId == postId);
+
+			var isAuthorized = await _authorizationService.AuthorizeAsync(
+				User, comment, RCloneOperations.Update);
+
+			if (!isAuthorized.Succeeded)
+			{
+				return new ChallengeResult();
+			}
+
+			if (await TryUpdateModelAsync<Comment>(
+					comment,
+					"",
+					c => c.Text))
+			{
+				try
+				{
+					await _context.SaveChangesAsync();
+					return RedirectToAction("DisplayPost", "Post", 
+						new 
+						{ 
+							communityName = post.Community.Name,
+							postId = postId
+						});
+				}
+				catch (DbUpdateException /* ex */)
+				{
+					// Log the update error
+					ModelState.AddModelError("", "Unable to save changes.");
+				}
+			}
+
+			return View();
 		}
 	}
 }
