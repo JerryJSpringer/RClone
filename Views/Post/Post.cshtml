@@ -21,11 +21,13 @@
 			{
 
 				<div class="form-group" id="create">
-					<input placeholder="Enter a title" asp-for="Title" class="form-control">
+					<input placeholder="Enter title" asp-for="Title" class="form-control">
+					<span asp-validation-for="Title" class="text-danger"></span>
 				</div>
 
 				<div class="form-group" id="create">
-					<textarea placeholder="Enter the text" asp-for="Text" class="form-control"></textarea>
+					<textarea placeholder="Enter text" asp-for="Text" class="form-control"></textarea>
+					<span asp-validation-for="Text" class="text-danger"></span>
 				</div>
 
 				<div id="create">
