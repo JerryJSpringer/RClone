@@ -25,7 +25,7 @@ namespace RClone
 					var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 					//var roleManager = services.GetRequiredService<RoleManager<ApplicationUser>>();
 
-					DbInitializer.Initialize(context, userManager);
+					//DbInitializer.Initialize(context, userManager);
 				}
 				catch (Exception ex)
 				{
