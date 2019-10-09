@@ -15,7 +15,7 @@
 <body>
 		@if (ViewBag.Community != null)
 		{
-			<div class="container" id="container-community-theme1">
+			<div class="container" id="container-community-theme-1">
 				<a asp-action="DisplayCommunity" asp-controller="Community" style="font-size:20px">@ViewBag.Community.Name</a>:
 
 				@if (ViewBag.Subscribed)
@@ -33,10 +33,11 @@
 
 		@foreach (Post post in ViewBag.Posts)
 		{
-			<div class="container" id="container-theme1">
+			<div class="container" id="container-theme-1">
 
-				<div class="row">
-					<div class="col-md-auto" style="text-align:center">
+				<!-- Votebox -->
+				<div class="row" id="no-margin">
+					<div id="votebox">
 						<div class="col">
 							<a onclick="UpvotePost(@post.PostId)" href="javascript:void(0)">+</a>
 						</div>
@@ -54,7 +55,8 @@
 						</div>
 					</div>
 
-					<div class="col-6">
+					<!-- Infobox -->
+					<div id="infobox">
 						<div class="col" style="font-size:20px">
 							<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@post.Community.Name" asp-route-postId="@post.PostId">
 								@post.Title

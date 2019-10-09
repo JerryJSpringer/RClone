@@ -75,7 +75,7 @@ div {
 	font-size: 15px;
 }
 
-#container-theme1 {
+#container-theme-1 {
 	background-color: aliceblue;
 	margin-top: 5px;
 	margin-bottom: 5px;
@@ -104,4 +104,19 @@ div {
 
 #create {
 	margin: 10px;
+}
+
+#votebox {
+	text-align: center;
+	max-width: 100px;
+	min-width: 5px;
+	width: 5%;
+}
+
+#infobox {
+	width: 95%;
+}
+
+#no-margin {
+	margin: 0px;
 }

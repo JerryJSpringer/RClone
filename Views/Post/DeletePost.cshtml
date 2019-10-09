@@ -9,7 +9,7 @@
 
 <p class="text-danger">@ViewData["ErrorMessage"]</p>
 
-<div class="container" id="container-theme1">
+<div class="container" id="container-theme-1">
 
 	<h5 id="create">
 		Delete Post
@@ -17,11 +17,11 @@
 
 	<!-- Post -->
 	<div id="create">
-		<div class="container" id="container-theme1">
+		<div class="container" id="container-theme-1">
 
-			<!-- Upvotes and downvotes -->
+			<!-- Votebox -->
 			<div class="row">
-				<div class="col-md-auto" style="text-align:center">
+				<div id="votebox">
 					<div class="col">
 						<a onclick="UpvotePost(@ViewBag.Post.PostId)" href="javascript:void(0)">+</a>
 					</div>
@@ -39,8 +39,8 @@
 					</div>
 				</div>
 
-				<!-- Post information -->
-				<div class="col-6">
+				<!-- Infobox -->
+				<div id="infobox">
 					<div class="col" style="font-size:20px">
 						<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@ViewBag.Post.Community.Name" asp-route-PostId="@ViewBag.Post.PostId">
 							@ViewBag.Post.Title

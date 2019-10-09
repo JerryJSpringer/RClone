@@ -9,120 +9,129 @@
 
 <p class="text-danger">@ViewData["ErrorMessage"]</p>
 
-<div class="container" id="container-theme1">
+<html>
+<head>
+</head>
 
-	<h5 id="create">
-		Delete Comment
-	</h5>
+<body>
+	<div class="container" id="container-theme-1">
 
-	<h6 id="create">
-		Post
-	</h6>
+		<h5 id="create">
+			Delete Comment
+		</h5>
 
-	<!-- Post -->
-	<div id="create">
-		<div class="container" id="container-theme1">
+		<h6 id="create">
+			Post
+		</h6>
 
-			<!-- Upvotes and downvotes -->
-			<div class="row">
-				<div class="col-md-auto" style="text-align:center">
-					<div class="col">
-						<a onclick="UpvotePost(@ViewBag.Post.PostId)" href="javascript:void(0)">+</a>
+		<!-- Post -->
+		<div id="create">
+			<div class="container" id="container-theme-1">
+
+				<!-- Votebox -->
+				<div class="row">
+					<div id="votebox">
+						<div class="col">
+							<a onclick="UpvotePost(@ViewBag.Post.PostId)" href="javascript:void(0)">+</a>
+						</div>
+
+						<div class="w-100"></div>
+
+						<div class="col">
+							@(ViewBag.Post.UpvotedPosts.Count - ViewBag.Post.DownvotedPosts.Count)
+						</div>
+
+						<div class="w-100"></div>
+
+						<div class="col">
+							<a onclick="DownvotePost(@ViewBag.Post.PostId)" href="javascript:void(0)">-</a>
+						</div>
 					</div>
 
-					<div class="w-100"></div>
+					<!-- Infobox -->
+					<div id="infobox">
+						<div class="col" style="font-size:20px">
+							<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@ViewBag.Post.Community.Name" asp-route-PostId="@ViewBag.Post.PostId">
+								@ViewBag.Post.Title
+							</a>
+						</div>
 
-					<div class="col">
-						@(ViewBag.Post.UpvotedPosts.Count - ViewBag.Post.DownvotedPosts.Count)
-					</div>
+						<div class="w-100"></div>
 
-					<div class="w-100"></div>
+						<div class="col" style="font-size:12px">
+							submitted at @ViewBag.Post.Time by @ViewBag.Post.UserInfo.Username to&nbsp;
+							<a asp-action="DisplayCommunity" asp-controller="Community" asp-route-communityName="@ViewBag.Post.Community.Name">
+								@ViewBag.Post.Community.Name
+							</a>
+						</div>
 
-					<div class="col">
-						<a onclick="DownvotePost(@ViewBag.Post.PostId)" href="javascript:void(0)">-</a>
-					</div>
-				</div>
+						<div class="w-100"></div>
 
-				<!-- Post information -->
-				<div class="col-6">
-					<div class="col" style="font-size:20px">
-						<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@ViewBag.Post.Community.Name" asp-route-PostId="@ViewBag.Post.PostId">
-							@ViewBag.Post.Title
-						</a>
-					</div>
+						<div class="col">
+							<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@ViewBag.Post.Community.Name" asp-route-PostId="@ViewBag.Post.PostId">
+								@(ViewBag.Post.Comments == null ? 0 : ViewBag.Post.Comments.Count) comments
+							</a>
+						</div>
 
-					<div class="w-100"></div>
-
-					<div class="col" style="font-size:12px">
-						submitted at @ViewBag.Post.Time by @ViewBag.Post.UserInfo.Username to&nbsp;
-						<a asp-action="DisplayCommunity" asp-controller="Community" asp-route-communityName="@ViewBag.Post.Community.Name">
-							@ViewBag.Post.Community.Name
-						</a>
-					</div>
-
-					<div class="w-100"></div>
-
-					<div class="col">
-						<a asp-action="DisplayPost" asp-controller="Post" asp-route-communityName="@ViewBag.Post.Community.Name" asp-route-PostId="@ViewBag.Post.PostId">
-							@(ViewBag.Post.Comments == null ? 0 : ViewBag.Post.Comments.Count) comments
-						</a>
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<h6 id="create">
-		Comment
-	</h6>
-
-	<!-- Comment -->
-	<div id="create">
-		<div class="container" id="container-comment-theme-1">
-
-			<div class="row">
-				<div class="col-md-auto" style="text-align:center">
-					<div class="col">
-						<a onclick="UpvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">+</a>
-					</div>
-
-					<div class="w-100"></div>
-
-					<div class="col">
-						<a onclick="DownvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">-</a>
-					</div>
-				</div>
-
-				<div class="col-10">
-					<div class="col" style="font-size:12px">
-						@ViewBag.Comment.UserInfo.Username @(ViewBag.Comment.UpvotedComments.Count - ViewBag.Comment.DownvotedComments.Count) @ViewBag.Comment.Time
-					</div>
-
-					<div class="col" style="font-size:15px">
-						@ViewBag.Comment.Text
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<!-- Action buttons -->
-	<form asp-action="DeleteComment">
-		<input type="hidden" asp-for="PostId" />
-		<input type="hidden" asp-for="CommentId" />
+		<h6 id="create">
+			Comment
+		</h6>
+
+		<!-- Comment -->
+		<div id="create">
+			<div class="container" id="container-comment-theme-1">
+
+				<div class="row">
+					<!-- Votebox -->
+					<div id="votebox">
+						<div class="col">
+							<a onclick="UpvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">+</a>
+						</div>
+
+						<div class="w-100"></div>
+
+						<div class="col">
+							<a onclick="DownvoteComment(@ViewBag.Post.PostId, @ViewBag.Comment.CommentId)" href="javascript:void(0)">-</a>
+						</div>
+					</div>
+
+					<!-- Infobox -->
+					<div id="infobox">
+						<div class="col" style="font-size:12px">
+							@ViewBag.Comment.UserInfo.Username @(ViewBag.Comment.UpvotedComments.Count - ViewBag.Comment.DownvotedComments.Count) @ViewBag.Comment.Time
+						</div>
+
+						<div class="col" style="font-size:15px">
+							@ViewBag.Comment.Text
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Action buttons -->
+		<form asp-action="DeleteComment">
+			<input type="hidden" asp-for="PostId" />
+			<input type="hidden" asp-for="CommentId" />
+
+			<div id="create">
+				<button type="submit">Submit</button>
+			</div>
+		</form>
+
+		<hr id="create" />
 
 		<div id="create">
-			<button type="submit">Submit</button>
+			<a asp-action="Index" asp-controller="Home">Back to Front Page</a>
 		</div>
-	</form>
-
-	<hr id="create" />
-
-	<div id="create">
-		<a asp-action="Index" asp-controller="Home">Back to Front Page</a>
 	</div>
-</div>
+</body>
+</html>
 
 
 @section scripts {
