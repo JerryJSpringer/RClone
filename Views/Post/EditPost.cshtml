@@ -23,14 +23,12 @@
 				<input type="hidden" asp-for="PostId" />
 
 				<div class="form-group" id="create">
-					<label asp-for="Title" class="control-label"></label>
-					<input asp-for="Title" class="form-control" />
+					<input asp-for="Title" class="form-control" placeholder="Enter new title"/>
 					<span asp-validation-for="Title" class="text-danger"></span>
 				</div>
 
 				<div class="form-group" id="create">
-					<label asp-for="Text" class="control-label"></label>
-					<input asp-for="Text" class="form-control" />
+					<input asp-for="Text" class="form-control" placeholder="Enter new text"/>
 					<span asp-validation-for="Text" class="text-danger"></span>
 				</div>
 
