@@ -70,7 +70,7 @@
 	@if (SignInManager.IsSignedIn(User))
 	{
 		<div class="container" id="container-comment-theme-1">
-			@using (Html.BeginForm("Comment", "Post", FormMethod.Post))
+			@using (Html.BeginForm("Comment", "Comment", FormMethod.Post))
 			{
 				<div class="form-group" style="margin: 10px">
 					<textarea placeholder="Enter a comment" asp-for="Text" class="form-control"></textarea>
@@ -108,7 +108,7 @@
 						@if ((await AuthorizationService.AuthorizeAsync(
 						   User, c, RCloneOperations.Update)).Succeeded)
 						{
-							<a asp-action="EditComment" asp-controller="Post" asp-route-postId="@ViewBag.Post.PostId"
+							<a asp-action="EditComment" asp-controller="Comment" asp-route-postId="@ViewBag.Post.PostId"
 							   asp-route-commentId="@c.CommentId">
 								Edit
 							</a>
@@ -117,7 +117,7 @@
 						@if ((await AuthorizationService.AuthorizeAsync(
 						   User, c, RCloneOperations.Delete)).Succeeded)
 						{
-							<a asp-action="DeleteComment" asp-controller="Post" asp-route-postId="@ViewBag.Post.PostId"
+							<a asp-action="DeleteComment" asp-controller="Comment" asp-route-postId="@ViewBag.Post.PostId"
 							   asp-route-commentId="@c.CommentId">
 								Delete
 							</a>
@@ -153,7 +153,7 @@
 		}
 
 		function UpvoteComment(postId, commentId) {
-			$.post('@Url.Action("UpvoteComment", "Post")',
+			$.post('@Url.Action("UpvoteComment", "Comment")',
 				{
 					postId: postId,
 					commentId: commentId
@@ -161,7 +161,7 @@
 		}
 
 		function DownvoteComment(postId, commentId) {
-			$.post('@Url.Action("DownvoteComment", "Post")',
+			$.post('@Url.Action("DownvoteComment", "Comment")',
 				{
 					postId: postId,
 					commentId: commentId
